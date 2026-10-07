@@ -1,0 +1,31 @@
+{
+  "config": {
+    "nombre": "UADAV Santa Fe",
+    "titulo": "Unión Argentina de Artistas de Variedades",
+    "descripcion": "Seccional Provincia de Santa Fe. Defensa de los artistas y trabajadores del espectáculo.",
+    "conduccion": "Secretario General Javier Aguilar – Conducción",
+    "color": "#0f4c81",
+    "whatsapp": "",
+    "direccion": "",
+    "horarios": "",
+    "email": "",
+    "dominio": "www.uadavsantafe.com.ar",
+    "afiliacion": "https://linktr.ee/uadavcentro",
+    "stream": "https://uadavstream.com.ar",
+    "instagram": "https://instagram.com/uadavarg",
+    "x": "https://x.com/uadavarg",
+    "gremial": "Defendemos los derechos de los artistas y trabajadores del espectáculo. Consultá a la seccional por inspecciones, condiciones laborales y convenios."
+  },
+  "comunicados": [],
+  "beneficios": [],
+  "cursos": [],
+  "agenda": [],
+  "autoridades": [
+    {
+      "id": "general",
+      "titulo": "Javier Aguilar",
+      "texto": "Secretario General",
+      "url": ""
+    }
+  ]
+}
