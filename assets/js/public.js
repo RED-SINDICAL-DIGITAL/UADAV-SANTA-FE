@@ -1,0 +1,10 @@
+(async()=>{
+const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safe=u=>{try{const x=new URL(u);return x.protocol==='https:'?x.href:''}catch{return ''}};
+let data;try{const res=await fetch('/api/content');if(!res.ok)throw Error();data=await res.json()}catch{data=await (await fetch('assets/content.json')).json()}
+for(const key of ['comunicados','agenda','cursos','beneficios','autoridades']){const el=document.getElementById('public-'+key);el.innerHTML=data[key].length?data[key].map(i=>`<article class="bg-white p-6 rounded-xl shadow border border-gray-100"><h4 class="font-bold text-lg text-blue-900">${esc(i.titulo)}</h4><p class="text-gray-600 mt-3 whitespace-pre-line">${esc(i.texto)}</p>${safe(i.url)?`<a class="block mt-4 text-blue-900 underline" href="${esc(safe(i.url))}" rel="noopener">Más información ↗</a>`:''}</article>`).join(''):'<p class="text-gray-500">Próximamente publicaremos información en esta sección.</p>'}
+const c=data.config;document.title=c.nombre+' – Seccional Santa Fe';document.querySelector('header h1').textContent=c.nombre;document.querySelector('section h2').textContent=c.titulo;document.querySelector('section p').textContent=c.descripcion+' '+c.conduccion;
+document.getElementById('gremial-text').textContent=c.gremial;document.getElementById('stream-link').href=safe(c.stream)||'#contacto';const socials=document.querySelectorAll('footer a');socials[0].href=safe(c.instagram)||'#contacto';socials[1].href=safe(c.x)||'#contacto';document.querySelector('header p').textContent=c.conduccion;document.querySelector('footer p').textContent=c.nombre;
+document.getElementById('afiliacion-link').href=safe(c.afiliacion)||'#contacto';
+document.getElementById('contact-details').innerHTML=[c.direccion,c.horarios].filter(Boolean).map(x=>`<p>${esc(x)}</p>`).join('')+(c.email?`<p>${esc(c.email)}</p>`:'')+(/^\d{10,15}$/.test(c.whatsapp)?`<a class="inline-block mt-4 bg-blue-900 text-white p-3 rounded-lg" href="https://wa.me/${c.whatsapp}">Consultar por WhatsApp</a>`:'<p>Los datos oficiales de atención se publicarán próximamente.</p>');
+})();

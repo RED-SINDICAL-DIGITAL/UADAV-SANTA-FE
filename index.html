@@ -1,710 +1,210 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MODO PEREGRINO - Streaming Católico & Vatican News Live</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            vatican: {
-              gold: '#D4AF37',
-              goldHover: '#B59226',
-              dark: '#070A10',
-              card: '#111726',
-              border: '#1E293B'
-            }
-          },
-          fontFamily: {
-            serif: ['Cinzel', 'serif'],
-            sans: ['Plus Jakarta Sans', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-
-  <style>
-    body { background-color: #070A10; color: #E2E8F0; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    
-    /* Enfoque optimizado para Smart TV */
-    *:focus-visible { outline: none; }
-    .tv-focusable:focus {
-      outline: 3px solid #D4AF37 !important;
-      outline-offset: 3px;
-      transform: scale(1.02);
-      z-index: 30;
-      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-    }
-
-    /* Estilo del número Top 10 inspirado en Formed / Netflix */
-    .top10-number {
-      font-family: 'Cinzel', serif;
-      font-weight: 800;
-      color: #070A10;
-      -webkit-text-stroke: 2px #D4AF37;
-      text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UADAV - Seccional Provincia de Santa Fe</title>
+    <!-- Tailwind CSS para diseño moderno y rápido -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Iconos de FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Ajustes de color basados en la identidad clásica de UADAV (Azules y celestes institucionales) */
+        .bg-uadav-primary { background-color: #0f4c81; }
+        .text-uadav-secondary { color: #00a8cc; }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-vatican-gold selection:text-black">
+<body class="bg-gray-50 text-gray-800 font-sans">
 
-  <header class="sticky top-0 z-40 bg-vatican-dark/95 backdrop-blur-md border-b border-vatican-border">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
-      
-      <div tabindex="0" onclick="resetearVista()" class="tv-focusable flex items-center gap-3 cursor-pointer rounded-xl p-1.5 transition-all">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-vatican-gold to-yellow-600 flex items-center justify-center text-slate-950 font-extrabold text-xl shadow-lg shadow-vatican-gold/20">
-          ✝
-        </div>
-        <div>
-          <span class="font-serif font-bold text-lg sm:text-xl tracking-wider text-white block leading-none">MODO PEREGRINO</span>
-          <span class="text-[9px] sm:text-[10px] tracking-widest text-vatican-gold uppercase font-semibold">Vatican News & Magisterio</span>
-        </div>
-      </div>
-
-      <div class="flex-1 max-w-md mx-2 hidden sm:block">
-        <div class="relative">
-          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-          <input type="text" id="searchInput" oninput="buscarContenido()" placeholder="Buscar en Vatican News, homilías, Shorts..." 
-            tabindex="0" class="tv-focusable w-full pl-10 pr-4 py-2 bg-slate-900 border border-vatican-border rounded-full text-xs sm:text-sm text-slate-200 placeholder-slate-400 focus:border-vatican-gold">
-        </div>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <button tabindex="0" onclick="reproducirVideo('5lfWxoaPGRg', 'Vatican Media Live - Señal Oficial en Vivo', 'Vatican Live', 'Transmisión continua de las actividades de la Santa Sede y eventos pontificios.')" 
-          class="tv-focusable flex items-center gap-2 bg-red-600/20 hover:bg-red-600/30 border border-red-500/50 text-red-400 px-3.5 py-2 rounded-full text-xs font-semibold animate-pulse">
-          <i class="fa-solid fa-circle text-[10px] text-red-500"></i> En Vivo
-        </button>
-        <button tabindex="0" onclick="abrirProbadorDirecto()" class="tv-focusable flex items-center gap-2 bg-vatican-gold/10 hover:bg-vatican-gold/20 border border-vatican-gold/40 text-vatican-gold px-3.5 py-2 rounded-full text-xs font-semibold">
-          <i class="fa-brands fa-youtube text-red-500"></i> Probador URL
-        </button>
-      </div>
-    </div>
-
-    <nav class="border-t border-vatican-border bg-slate-950/80">
-      <div class="max-w-7xl mx-auto px-4 flex items-center gap-2 overflow-x-auto py-2.5 no-scrollbar text-xs">
-        <button tabindex="0" onclick="filtrarCategoria('todas', this)" class="tv-focusable cat-btn active-cat bg-vatican-gold text-slate-950 font-bold px-4 py-1.5 rounded-full whitespace-nowrap transition-all">Inicio</button>
-        <button tabindex="0" onclick="filtrarCategoria('favoritos', this)" class="tv-focusable cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-1.5 rounded-full whitespace-nowrap transition-all"><i class="fa-solid fa-star text-vatican-gold mr-1"></i> Mi Lista</button>
-        <button tabindex="0" onclick="filtrarCategoria('Vatican Shorts', this)" class="tv-focusable cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-1.5 rounded-full whitespace-nowrap transition-all"><i class="fa-solid fa-bolt text-vatican-gold mr-1"></i> Vatican Shorts</button>
-        <button tabindex="0" onclick="filtrarCategoria('Papa León', this)" class="tv-focusable cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-1.5 rounded-full whitespace-nowrap transition-all">Magisterio Papa León</button>
-        <button tabindex="0" onclick="filtrarCategoria('Calendario', this)" class="tv-focusable cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-1.5 rounded-full whitespace-nowrap transition-all"><i class="fa-solid fa-calendar-day text-vatican-gold mr-1"></i> Calendario Litúrgico</button>
-        <button tabindex="0" onclick="filtrarCategoria('Documentales', this)" class="tv-focusable cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-1.5 rounded-full whitespace-nowrap transition-all">Documentales</button>
-        <button tabindex="0" onclick="filtrarCategoria('Audios', this)" class="tv-focusable cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-1.5 rounded-full whitespace-nowrap transition-all"><i class="fa-solid fa-headphones text-vatican-gold mr-1"></i> Audios y Audiolibros</button>
-      </div>
-    </nav>
-  </header>
-
-  <section class="relative bg-slate-950 border-b border-vatican-border overflow-hidden">
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1548625149-fc4a29cf7092?q=80&w=1600')] bg-cover bg-center opacity-20 filter blur-[1px]"></div>
-    <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-vatican-dark via-vatican-dark/90 to-transparent"></div>
-    
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 md:py-20 flex flex-col items-start justify-center">
-      <span class="inline-flex items-center gap-2 bg-red-600/20 text-red-400 border border-red-500/30 px-3 py-1 rounded-full text-xs font-bold uppercase mb-3">
-        <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span> Transmisión en Vivo - Vatican Media
-      </span>
-      <h1 class="font-serif text-2xl sm:text-4xl lg:text-5xl font-bold text-white max-w-2xl leading-tight mb-3">
-        Señal Oficial en Vivo desde la Ciudad del Vaticano
-      </h1>
-      <p class="text-slate-300 text-xs sm:text-sm max-w-xl mb-6 leading-relaxed">
-        Sigue en directo las ceremonias litúrgicas, Ángelus, audiencias generales y transmisiones oficiales de Vatican News en español.
-      </p>
-
-      <div class="flex flex-wrap gap-3">
-        <button tabindex="0" onclick="reproducirVideo('5lfWxoaPGRg', 'Vatican Media Live - Español', 'Vatican Live', 'Señal continua en vivo del Vaticano en español.')" 
-          class="tv-focusable bg-vatican-gold hover:bg-vatican-goldHover text-slate-950 px-6 py-3 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-vatican-gold/20 transition-all">
-          <i class="fa-solid fa-play"></i> Sintonizar en Vivo
-        </button>
-        <button tabindex="0" onclick="toggleFavoritoHero('5lfWxoaPGRg')" id="btnHeroFav" class="tv-focusable bg-slate-800/80 hover:bg-slate-700 text-white border border-slate-700 px-5 py-3 rounded-xl font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all">
-          <i class="fa-regular fa-star text-vatican-gold"></i> Guardar en Mi Lista
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <main id="mainContainer" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-
-    <section>
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <h2 class="font-serif text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-bolt text-vatican-gold"></i> Vatican Shorts (Mensajes Rápidos)
-          </h2>
-          <p class="text-xs text-slate-400">Reflexiones breves y cápsulas en formato vertical</p>
-        </div>
-        <span class="text-[10px] bg-slate-800 text-vatican-gold border border-vatican-gold/30 px-2.5 py-1 rounded-full">Actualización Diaria</span>
-      </div>
-      <div id="shortsRail" class="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
-        </div>
-    </section>
-
-    <section>
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <h2 class="font-serif text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-calendar-days text-vatican-gold"></i> Calendario Litúrgico
-          </h2>
-          <p class="text-xs text-slate-400">Contenido diario de fe, santos y lecturas</p>
-        </div>
-      </div>
-      <div id="liturgicalRail" class="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
-        </div>
-    </section>
-
-    <section>
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <h2 class="font-serif text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-fire text-vatican-gold"></i> Top 10 Mas Vistos de la Semana
-          </h2>
-          <p class="text-xs text-slate-400">Los contenidos más reproducidos en la comunidad</p>
-        </div>
-      </div>
-      <div id="top10Rail" class="flex gap-6 overflow-x-auto pb-4 no-scrollbar">
-        </div>
-    </section>
-
-    <section>
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="font-serif text-lg sm:text-xl font-bold text-white">Magisterio & Últimos Videos de Papa León</h2>
-      </div>
-      <div id="papeLeonRail" class="flex gap-4 overflow-x-auto pb-4 no-scrollbar"></div>
-    </section>
-
-    <section>
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="font-serif text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-headphones text-vatican-gold"></i> Audios, Podcasts y Audiolibros
-        </h2>
-      </div>
-      <div id="audiosRail" class="flex gap-4 overflow-x-auto pb-4 no-scrollbar"></div>
-    </section>
-
-    <section>
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="font-serif text-lg sm:text-xl font-bold text-white">Niños & Catequesis Familiar</h2>
-      </div>
-      <div id="kidsRail" class="flex gap-4 overflow-x-auto pb-4 no-scrollbar"></div>
-    </section>
-
-  </main>
-
-  <section id="gridViewSection" class="hidden max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex items-center justify-between mb-6">
-      <h2 id="gridTitle" class="font-serif text-xl sm:text-2xl font-bold text-white">Resultados</h2>
-      <button onclick="resetearVista()" class="text-xs text-vatican-gold hover:underline"><i class="fa-solid fa-arrow-left"></i> Volver al Inicio</button>
-    </div>
-    <div id="gridContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
-  </section>
-
-  <section id="planes" class="bg-slate-950 border-t border-vatican-border py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mb-3">Plataforma SaaS para Parroquias y Colegios</h2>
-        <p class="text-slate-400 text-xs sm:text-sm">Ofrece MODO PEREGRINO a tu comunidad feligrés con licencias institucionales.</p>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="bg-vatican-card border border-vatican-border p-6 rounded-2xl flex flex-col justify-between">
-          <div>
-            <h3 class="font-serif font-bold text-lg text-white mb-2">Comunidad Parroquial</h3>
-            <p class="text-xs text-slate-400 mb-6">Acceso a magisterio y liturgia diaria.</p>
-            <div class="text-3xl font-bold text-vatican-gold mb-6">Demo <span class="text-xs font-normal text-slate-400">/ acceso libre</span></div>
-          </div>
-          <button tabindex="0" onclick="alert('Solicitud enviada')" class="tv-focusable w-full bg-slate-800 hover:bg-slate-700 text-white py-2.5 rounded-xl font-semibold text-xs">Probar Servicio</button>
-        </div>
-
-        <div class="bg-gradient-to-b from-slate-900 to-vatican-card border-2 border-vatican-gold p-6 rounded-2xl flex flex-col justify-between relative shadow-xl shadow-vatican-gold/10">
-          <span class="absolute -top-3 right-6 bg-vatican-gold text-slate-950 text-[10px] font-extrabold uppercase px-3 py-0.5 rounded-full">Licencia Institucional</span>
-          <div>
-            <h3 class="font-serif font-bold text-lg text-white mb-2">Colegios y Diócesis</h3>
-            <p class="text-xs text-slate-400 mb-6">Multi-usuario con catálogo completo e integración personalizada.</p>
-            <div class="text-3xl font-bold text-vatican-gold mb-6">SaaS Completo</div>
-          </div>
-          <button tabindex="0" onclick="alert('Demostración agendada')" class="tv-focusable w-full bg-vatican-gold hover:bg-vatican-goldHover text-slate-950 py-2.5 rounded-xl font-bold text-xs">Solicitar Demostración</button>
-        </div>
-
-        <div class="bg-vatican-card border border-vatican-border p-6 rounded-2xl flex flex-col justify-between">
-          <div>
-            <h3 class="font-serif font-bold text-lg text-white mb-2">Redes de Medios</h3>
-            <p class="text-xs text-slate-400 mb-6">Infraestructura CDN de streaming católico.</p>
-            <div class="text-3xl font-bold text-vatican-gold mb-6">A Medida</div>
-          </div>
-          <button tabindex="0" onclick="alert('Contacto iniciado')" class="tv-focusable w-full bg-slate-800 hover:bg-slate-700 text-white py-2.5 rounded-xl font-semibold text-xs">Consultar Plan</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="bg-slate-950 border-t border-vatican-border py-8 text-center text-xs text-slate-500">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-2">
-        <span class="font-serif font-bold text-white">MODO PEREGRINO</span>
-        <span>— Inspirado en Formed.org & Vatican News</span>
-      </div>
-      <p>Desarrollado para distribución y streaming de contenidos católicos.</p>
-    </div>
-  </footer>
-
-  <div id="videoModal" onclick="cerrarModalBackdrop(event)" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-2 sm:p-4">
-    <div class="bg-vatican-card border border-slate-700 w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl relative flex flex-col max-h-[95vh]" onclick="event.stopPropagation()">
-      
-      <button tabindex="0" onclick="cerrarModal()" class="tv-focusable absolute top-3 right-3 z-20 w-10 h-10 bg-slate-950/80 hover:bg-red-600 text-white rounded-full flex items-center justify-center border border-slate-700 transition-colors">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="relative w-full aspect-video bg-black">
-        <iframe id="iframePlayer" class="w-full h-full" src="" title="Video Player" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          referrerpolicy="strict-origin-when-cross-origin" 
-          allowfullscreen>
-        </iframe>
-      </div>
-
-      <div class="p-4 sm:p-6 overflow-y-auto">
-        <div class="flex items-center justify-between gap-2 mb-2">
-          <span id="modalCategoria" class="bg-vatican-gold/20 text-vatican-gold border border-vatican-gold/30 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase">Categoría</span>
-          <button id="btnModalFav" onclick="toggleFavoritoModal()" class="tv-focusable text-slate-300 hover:text-vatican-gold text-xs flex items-center gap-1.5 px-3 py-1 bg-slate-900 border border-slate-800 rounded-lg">
-            <i class="fa-regular fa-star text-vatican-gold"></i> Mi Lista
-          </button>
-        </div>
-
-        <h3 id="modalTitulo" class="font-serif text-lg sm:text-xl font-bold text-white mb-2">Título</h3>
-        <p id="modalDescripcion" class="text-slate-300 text-xs sm:text-sm mb-4 leading-relaxed">Descripción...</p>
-
-        <div class="border-t border-vatican-border pt-4">
-          <label class="block text-[11px] font-semibold text-vatican-gold mb-1.5"><i class="fa-brands fa-youtube text-red-500 mr-1"></i> Probador Universal de Enlaces de YouTube:</label>
-          <div class="flex flex-col sm:flex-row items-center gap-2">
-            <input type="text" id="customLinkInput" placeholder="Pega un enlace de YouTube o Short aquí..." 
-              tabindex="0" class="tv-focusable flex-1 w-full bg-slate-900 border border-vatican-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500">
-            <button tabindex="0" onclick="cargarLinkPersonalizado()" class="tv-focusable w-full sm:w-auto bg-vatican-gold hover:bg-vatican-goldHover text-slate-950 font-bold px-4 py-2 rounded-lg text-xs">Cargar Video</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // BASE DE DATOS LOCAL CON VATICAN NEWS Y SHORTS
-    let catalog = [
-      {
-        id: "5lfWxoaPGRg",
-        titulo: "Vatican Media Live - Transmisión en Vivo",
-        categoria: "Vatican Live",
-        descripcion: "Señal oficial e ininterrumpida en español desde el Vaticano.",
-        duracion: "EN VIVO",
-        tipo: "video",
-        top: 1
-      },
-      {
-        id: "pT_jmrBVafs",
-        titulo: "Angelus - Papa León XIV",
-        categoria: "Papa León",
-        descripcion: "Oración mariana del Ángelus y bendición desde la Plaza de San Pedro.",
-        duracion: "19 min",
-        tipo: "video",
-        top: 2
-      },
-      {
-        id: "B_NXnHU04u4",
-        titulo: "Solemnidad de la Asunción - Santa Misa",
-        categoria: "Papa León",
-        descripcion: "Celebración eucarística presidida por el Papa León XIV.",
-        duracion: "1h 16m",
-        tipo: "video",
-        top: 3
-      },
-      {
-        id: "5ob7ZyXpsvU",
-        titulo: "Ángelus y Reflexión Dominical",
-        categoria: "Papa León",
-        descripcion: "Reflexión sobre el Evangelio y saludos a los peregrinos.",
-        duracion: "17 min",
-        tipo: "video",
-        top: 4
-      },
-      // SHORTS DE VATICAN NEWS
-      {
-        id: "rG_gmLYcMdw",
-        titulo: "Sean cercanos a su grey - Papa León XIV",
-        categoria: "Vatican Shorts",
-        descripcion: "Mensaje breve a los pastores e iglesias locales.",
-        duracion: "0:50",
-        tipo: "short"
-      },
-      {
-        id: "5rI21aZHe_E",
-        titulo: "El poder de transformar nuestras actitudes",
-        categoria: "Vatican Shorts",
-        descripcion: "Reflexión espiritual sobre la oración en la vida diaria.",
-        duracion: "0:23",
-        tipo: "short"
-      },
-      {
-        id: "FfmZoFRtOhU",
-        titulo: "Martirio quiere decir testimonio",
-        categoria: "Vatican Shorts",
-        descripcion: "Cápsula del Santo Padre sobre los testigos de la fe.",
-        duracion: "0:15",
-        tipo: "short"
-      },
-      {
-        id: "pF5TrFOvVuA",
-        titulo: "La justicia: Antídoto contra la corrupción",
-        categoria: "Vatican Shorts",
-        descripcion: "Enseñanza sobre la doctrina social y las virtudes.",
-        duracion: "1:00",
-        tipo: "short"
-      },
-      // OTROS CONTENIDOS
-      {
-        id: "6x8Kpye8jwc",
-        titulo: "Documental: Los Secretos del Vaticano y el Papado",
-        categoria: "Documentales",
-        descripcion: "Recorrido histórico por los archivos y el patrimonio sacro de la Santa Sede.",
-        duracion: "45 min",
-        tipo: "video",
-        top: 5
-      },
-      {
-        id: "M7lc1UVf-VE",
-        titulo: "Audiolibro: Tratado de la Humildad y la Oración",
-        categoria: "Audios",
-        descripcion: "Lectura dramatizada con reflexiones teológicas para la vida diaria.",
-        duracion: "30 min",
-        tipo: "audio",
-        top: 6
-      },
-      {
-        id: "aI7bQotscDE",
-        titulo: "Catequesis para Niños: La Parábola del Buen Sembrador",
-        categoria: "Niños",
-        descripcion: "Animación didáctica para explicar el Evangelio a los más pequeños.",
-        duracion: "10 min",
-        tipo: "video",
-        top: 7
-      }
-    ];
-
-    const calendarioLiturgico = [
-      { fecha: "17 AGO", titulo: "San Jacinto", desc: "Evangelio y comentario de San Jacinto." },
-      { fecha: "18 AGO", titulo: "Santa Elena", desc: "Reflexión sobre la Santa Cruz." },
-      { fecha: "19 AGO", titulo: "San Juan Eudes", desc: "Corazón de Jesús y María." },
-      { fecha: "20 AGO", titulo: "San Bernardo", desc: "Doctor de la Iglesia y sermones." },
-      { fecha: "21 AGO", titulo: "San Pío X", desc: "El amor a la Eucaristía." }
-    ];
-
-    let favoritos = JSON.parse(localStorage.getItem('modo_peregrino_favs') || '[]');
-    let currentVideoId = null;
-
-    // EXTRAER ID DE YOUTUBE (INCLUIDO FORMATO SHORTS)
-    function extraerYouTubeId(url) {
-      if (!url) return null;
-      url = url.trim();
-      if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
-      const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/;
-      const match = url.match(regExp);
-      return (match && match[1]) ? match[1] : null;
-    }
-
-    function construirEmbedUrl(id) {
-      return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&enablejsapi=1&rel=0&modestbranding=1`;
-    }
-
-    // CREAR TARJETA DE VIDEO ESTILO FORMED (HORIZONTAL)
-    function crearCard(item) {
-      const isFav = favoritos.includes(item.id);
-      const card = document.createElement('div');
-      card.className = "tv-focusable min-w-[240px] max-w-[260px] bg-vatican-card border border-vatican-border hover:border-vatican-gold/50 rounded-xl overflow-hidden shadow-lg transition-all group cursor-pointer flex-shrink-0 flex flex-col justify-between";
-      card.setAttribute('tabindex', '0');
-
-      card.innerHTML = `
-        <div>
-          <div class="relative aspect-video bg-slate-900 overflow-hidden" onclick="reproducirVideo('${item.id}', '${item.titulo}', '${item.categoria}', '${item.descripcion}')">
-            <img src="https://img.youtube.com/vi/${item.id}/hqdefault.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-            <div class="absolute inset-0 bg-slate-950/40 flex items-center justify-center">
-              <div class="w-10 h-10 bg-vatican-gold text-slate-950 rounded-full flex items-center justify-center font-bold shadow-lg">
-                <i class="fa-solid ${item.tipo === 'audio' ? 'fa-headphones' : 'fa-play'} text-xs pl-0.5"></i>
-              </div>
+    <!-- HEADER / NAV -->
+    <header class="bg-blue-900 text-white sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <!-- Reemplazar con URL del logo final -->
+                <img src="assets/img/logo.png" alt="UADAV" class="w-12 h-12 object-contain bg-white rounded-full">
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">UADAV Santa Fe</h1>
+                    <p class="text-xs text-blue-200">Variedades · Gestión Javier Aguilar</p>
+                </div>
             </div>
-            <span class="absolute bottom-2 right-2 bg-slate-950/90 text-white text-[10px] px-2 py-0.5 rounded">${item.duracion}</span>
-          </div>
-          <div class="p-3" onclick="reproducirVideo('${item.id}', '${item.titulo}', '${item.categoria}', '${item.descripcion}')">
-            <span class="text-[9px] text-vatican-gold font-bold uppercase block mb-1">${item.categoria}</span>
-            <h3 class="font-bold text-xs text-white group-hover:text-vatican-gold transition-colors line-clamp-2">${item.titulo}</h3>
-          </div>
+            <nav class="hidden md:flex space-x-6 text-sm font-medium">
+                <a href="#noticias" class="hover:text-blue-300 transition">Comunicados</a>
+                <a href="#gremial" class="hover:text-blue-300 transition">Gremial e Inspecciones</a>
+                <a href="#afiliados" class="hover:text-blue-300 transition">Afiliados</a>
+                <a href="#cultura" class="hover:text-blue-300 transition">Agenda Cultural</a>
+                <a href="#autoridades" class="hover:text-blue-300 transition">Autoridades</a>
+            </nav>
+            <a href="#denuncias" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center space-x-2 transition shadow">
+                <i class="fas fa-exclamation-triangle"></i> <span>Denuncias</span>
+            </a>
         </div>
-        <div class="px-3 pb-2 flex items-center justify-between text-[10px] border-t border-slate-800">
-          <span class="text-slate-400">Vatican Media</span>
-          <button onclick="toggleFavoritoCard(event, '${item.id}')" class="text-slate-400 hover:text-vatican-gold p-1">
-            <i class="${isFav ? 'fa-solid text-vatican-gold' : 'fa-regular'} fa-star"></i>
-          </button>
-        </div>
-      `;
-      return card;
-    }
+    </header>
 
-    // CREAR TARJETA DE VATICAN SHORTS (VERTICAL 9:16)
-    function crearShortCard(item) {
-      const isFav = favoritos.includes(item.id);
-      const card = document.createElement('div');
-      card.className = "tv-focusable min-w-[160px] max-w-[180px] bg-vatican-card border border-vatican-border hover:border-vatican-gold rounded-xl overflow-hidden shadow-lg transition-all group cursor-pointer flex-shrink-0 flex flex-col justify-between";
-      card.setAttribute('tabindex', '0');
-
-      card.innerHTML = `
-        <div onclick="reproducirVideo('${item.id}', '${item.titulo}', '${item.categoria}', '${item.descripcion}')">
-          <div class="relative aspect-[9/16] bg-slate-900 overflow-hidden">
-            <img src="https://img.youtube.com/vi/${item.id}/hqdefault.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
-            <div class="absolute top-2 left-2 bg-red-600 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded flex items-center gap-1">
-              <i class="fa-solid fa-bolt"></i> SHORT
+    <nav class="md:hidden bg-blue-950 text-white flex gap-5 overflow-x-auto px-4 py-3 text-sm" aria-label="Menú móvil"><a href="#noticias">Comunicados</a><a href="#gremial">Gremial</a><a href="#afiliados">Afiliación</a><a href="#cultura">Agenda</a><a href="#autoridades">Autoridades</a><a href="#contacto">Contacto</a></nav>
+<!-- HERO SECTION (Presentación Institucional) -->
+    <section class="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-16 md:py-24">
+        <div class="container mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
+            <div>
+                <span class="bg-blue-700 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full text-blue-200">Seccional Provincia de Santa Fe</span>
+                <h2 class="text-4xl md:text-5xl font-extrabold mt-4 leading-tight">Unión Argentina de Artistas de Variedades</h2>
+                <p class="mt-4 text-lg text-blue-100">Conducción: <strong>Javier Aguilar</strong> - Secretario General. Construyendo un sindicato moderno, presente, transparente y al servicio del trabajador del arte y el espectáculo.</p>
+                <div class="mt-8 flex flex-wrap gap-4">
+                    <a href="#afiliaciones" class="bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold px-6 py-3 rounded-xl transition shadow-lg flex items-center space-x-2">
+                        <i class="fas fa-user-plus"></i> <span>Afiliate Acá</span>
+                    </a>
+                    <a href="#credencial" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-xl border border-white/20 transition flex items-center space-x-2">
+                        <i class="fas fa-id-card"></i> <span>Credencial Digital</span>
+                    </a>
+                </div>
             </div>
-            <div class="absolute bottom-2 left-2 right-2">
-              <h4 class="font-bold text-xs text-white line-clamp-2 drop-shadow-md">${item.titulo}</h4>
+            <div class="hidden md:flex justify-center">
+                <!-- Espacio para banner o foto institucional de Javier Aguilar / Comisión -->
+                <div class="w-full max-w-sm h-80 bg-blue-950/50 rounded-2xl border border-blue-700/50 flex flex-col items-center justify-center p-6 text-center">
+                    <i class="fas fa-users text-5xl text-cyan-400 mb-4"></i>
+                    <p class="text-sm text-blue-200">"El crecimiento de los artistas de variedades en toda la provincia es nuestro compromiso diario."</p>
+                    <p class="text-sm font-bold mt-4 text-white">— Javier Aguilar</p>
+                </div>
             </div>
-          </div>
         </div>
-        <div class="p-2 flex items-center justify-between text-[10px] border-t border-slate-800 bg-slate-950/80">
-          <span class="text-vatican-gold font-semibold">Vatican Short</span>
-          <button onclick="toggleFavoritoCard(event, '${item.id}')" class="text-slate-400 hover:text-vatican-gold p-1">
-            <i class="${isFav ? 'fa-solid text-vatican-gold' : 'fa-regular'} fa-star"></i>
-          </button>
-        </div>
-      `;
-      return card;
-    }
+    </section>
 
-    // AUTO-ACTUALIZACIÓN VÍA RSS DE YOUTUBE (VATICAN NEWS)
-    async function cargarFeedVaticanoRSS() {
-      try {
-        // Canal Vatican News Español ID: UC7E-LYc1wivk33iYT5bR3zQ
-        const feedUrl = "https://www.youtube.com/feeds/videos.xml?channel_id=UC7E-LYc1wivk33iYT5bR3zQ";
-        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
+    <!-- ACCESOS RÁPIDOS ESTILO "PAMI" (Botones Grandes y Claros) -->
+    <section class="container mx-auto px-4 -mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
+        <a href="#gremial" class="bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl transition border-b-4 border-amber-500 text-center group">
+            <i class="fas fa-clipboard-check text-3xl text-amber-500 mb-2 group-hover:scale-110 transition"></i>
+            <span class="block font-bold text-gray-800 text-sm md:text-base">Inspecciones y Operativos</span>
+        </a>
+        <a href="#credencial" class="bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl transition border-b-4 border-blue-500 text-center group">
+            <i class="fas fa-id-card text-3xl text-blue-500 mb-2 group-hover:scale-110 transition"></i>
+            <span class="block font-bold text-gray-800 text-sm md:text-base">Mi Credencial</span>
+        </a>
+        <a href="#cursos" class="bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl transition border-b-4 border-green-500 text-center group">
+            <i class="fas fa-graduation-cap text-3xl text-green-500 mb-2 group-hover:scale-110 transition"></i>
+            <span class="block font-bold text-gray-800 text-sm md:text-base">Cursos y Capacitaciones</span>
+        </a>
+        <a href="#inspectores" class="bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl transition border-b-4 border-purple-500 text-center group">
+            <i class="fas fa-user-shield text-3xl text-purple-500 mb-2 group-hover:scale-110 transition"></i>
+            <span class="block font-bold text-gray-800 text-sm md:text-base">Verificar Inspector</span>
+        </a>
+    </section>
+
+    <!-- SECCIÓN NOTICIAS LOCALES & STREAMING -->
+    <section id="noticias" class="container mx-auto px-4 py-16">
+        <div class="flex justify-between items-end mb-8">
+            <div>
+                <h3 class="text-2xl font-bold text-blue-900">Comunicados del Sindicato</h3>
+                <p class="text-sm text-gray-500">Actualidad gremial y sectorial de la provincia</p>
+            </div>
+            <!-- Botón Streaming Opcional -->
+            <a id="stream-link" href="https://uadavstream.com.ar" class="text-blue-900 font-bold">★ UADAV STREAM ↗</a>
+        </div>
         
-        const response = await fetch(apiUrl);
-        const data = await response.json();
+        <div id="public-comunicados" class="grid md:grid-cols-3 gap-8"></div>
+</section>
 
-        if (data && data.items) {
-          data.items.slice(0, 8).forEach(item => {
-            const videoId = extraerYouTubeId(item.link);
-            if (videoId && !catalog.some(c => c.id === videoId)) {
-              const esShort = item.title.toLowerCase().includes('short') || item.link.includes('/shorts/');
-              catalog.unshift({
-                id: videoId,
-                titulo: item.title,
-                categoria: esShort ? "Vatican Shorts" : "Papa León",
-                descripcion: "Publicado en Vatican News: " + item.pubDate,
-                duracion: esShort ? "0:60" : "Reciente",
-                tipo: esShort ? "short" : "video"
-              });
-            }
-          });
-          cargarHome();
-        }
-      } catch (err) {
-        console.log("Cargando catálogo base local de Vatican News.");
-      }
-    }
+    <hr class="container mx-auto border-gray-200">
 
-    // CARGAR CARRUSELES EN HOME
-    function cargarHome() {
-      // Shorts
-      const shortsRail = document.getElementById('shortsRail');
-      shortsRail.innerHTML = '';
-      const shortsList = catalog.filter(i => i.tipo === 'short' || i.categoria === 'Vatican Shorts');
-      shortsList.forEach(s => shortsRail.appendChild(crearShortCard(s)));
+    <!-- SECCIÓN ACCIÓN GREMIAL & INSPECTORES -->
+    <section id="gremial" class="bg-gray-100 py-16">
+        <div class="container mx-auto px-4 grid md:grid-cols-2 gap-12">
+            <!-- Inspecciones y Operativos -->
+            <div>
+                <h3 class="text-2xl font-bold text-blue-900 mb-4"><i class="fas fa-clipboard-list text-amber-500 mr-2"></i> Inspecciones y Operativos</h3>
+                <p id="gremial-text" class="text-gray-600 mb-6">Nuestra seccional mantiene una presencia activa en la vía pública, salas, teatros y festivales para asegurar que cada artista de variedades trabaje bajo condiciones dignas y amparadas por la ley.</p>
+                <p class="text-sm text-gray-600">Consultá a la seccional para conocer las actuaciones y los canales de atención vigentes.</p>
+            </div>
 
-      // Litúrgico
-      const litRail = document.getElementById('liturgicalRail');
-      litRail.innerHTML = '';
-      calendarioLiturgico.forEach(c => {
-        litRail.innerHTML += `
-          <div tabindex="0" onclick="alert('Cargando lecturas de ${c.titulo}')" class="tv-focusable min-w-[200px] bg-gradient-to-br from-slate-900 to-vatican-card border border-vatican-border p-4 rounded-xl flex-shrink-0 cursor-pointer hover:border-vatican-gold">
-            <span class="text-xs font-bold text-vatican-gold block mb-1"><i class="fa-solid fa-cross mr-1"></i> ${c.fecha}</span>
-            <h4 class="font-serif font-bold text-sm text-white mb-1">${c.titulo}</h4>
-            <p class="text-[11px] text-slate-400 line-clamp-2">${c.desc}</p>
-          </div>
-        `;
-      });
+            <div id="inspectores" class="bg-white p-8 rounded-2xl shadow-md"><h4 class="text-xl font-bold">Inspectores habilitados</h4><p class="mt-3">La verificación pública de credenciales se habilitará cuando conectemos el registro oficial. Por ahora, solicitá confirmación a la seccional.</p><a href="#contacto" class="block mt-4 text-blue-900 font-bold">Consultar al sindicato</a></div>
+        </div>
+    </section>
 
-      // Top 10
-      const topRail = document.getElementById('top10Rail');
-      topRail.innerHTML = '';
-      catalog.filter(i => i.top).forEach(item => {
-        const topCard = document.createElement('div');
-        topCard.className = "tv-focusable min-w-[280px] flex items-center gap-2 bg-vatican-card border border-vatican-border rounded-xl p-2 cursor-pointer flex-shrink-0 hover:border-vatican-gold";
-        topCard.setAttribute('tabindex', '0');
-        topCard.onclick = () => reproducirVideo(item.id, item.titulo, item.categoria, item.descripcion);
+    <!-- PORTAL AFILIADOS (Credencial e Inscripción) -->
+    <section id="afiliados" class="container mx-auto px-4 py-16">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <h3 class="text-3xl font-bold text-blue-900">Portal del Afiliado</h3>
+            <p class="text-gray-600 mt-2">Canales de afiliación y orientación para artistas de variedades.</p>
+        </div>
 
-        topCard.innerHTML = `
-          <span class="top10-number text-5xl sm:text-6xl pl-1 select-none">${item.top}</span>
-          <div class="relative w-28 aspect-video rounded-lg overflow-hidden flex-shrink-0">
-            <img src="https://img.youtube.com/vi/${item.id}/hqdefault.jpg" class="w-full h-full object-cover">
-          </div>
-          <div class="pr-2">
-            <span class="text-[9px] text-vatican-gold font-bold uppercase">${item.categoria}</span>
-            <h4 class="font-bold text-xs text-white line-clamp-2">${item.titulo}</h4>
-          </div>
-        `;
-        topRail.appendChild(topCard);
-      });
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Formulario de Pre-Afiliación -->
+            <div id="afiliaciones" class="bg-white p-8 rounded-2xl shadow border border-gray-100">
+                <h4 class="text-xl font-bold text-gray-900 mb-4"><i class="fas fa-file-signature text-cyan-600 mr-2"></i> Solicitud de Afiliación Online</h4>
+                <p>Iniciá tu solicitud mediante el canal de afiliación de la seccional.</p><a id="afiliacion-link" href="https://linktr.ee/uadavcentro" class="block mt-6 bg-blue-900 text-white p-3 rounded-lg text-center">Iniciar afiliación</a>
+            </div>
 
-      // Papa León / Vaticano
-      const pRail = document.getElementById('papeLeonRail');
-      pRail.innerHTML = '';
-      catalog.filter(i => i.categoria === 'Papa León' || i.categoria === 'Vatican Live').forEach(i => pRail.appendChild(crearCard(i)));
+            <!-- Credencial Digital (Placeholder para tu sistema externo) -->
+            <div id="credencial" class="bg-gradient-to-br from-slate-900 to-blue-950 text-white p-8 rounded-2xl shadow-xl flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-start">
+                        <h4 class="text-xl font-bold text-cyan-400"><i class="fas fa-id-badge mr-2"></i> Credencial Digital</h4>
+                        <span class="text-[10px] bg-cyan-500/20 text-cyan-300 font-bold px-2 py-0.5 rounded border border-cyan-500/30">UADAV Móvil</span>
+                    </div>
+                    <p class="text-sm text-slate-300 mt-2">Gestioná tu solicitud de credencial mediante la seccional.</p>
+                </div>
 
-      // Audios
-      const aRail = document.getElementById('audiosRail');
-      aRail.innerHTML = '';
-      catalog.filter(i => i.categoria === 'Audios').forEach(i => aRail.appendChild(crearCard(i)));
+                <!-- Simulación gráfica de credencial -->
+                <div class="my-6 p-4 bg-white/5 rounded-xl border border-white/10 relative overflow-hidden">
+                    <div class="absolute -right-8 -bottom-8 text-white/5 text-8xl font-bold">U</div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 bg-slate-700 rounded-lg flex items-center justify-center text-slate-400 text-2xl"><i class="fas fa-user"></i></div>
+                        <div>
+                            <div class="w-28 h-3 bg-white/20 rounded mb-2"></div>
+                            <div class="w-20 h-2 bg-white/10 rounded mb-1"></div>
+                            <div class="w-16 h-2 bg-white/10 rounded"></div>
+                        </div>
+                    </div>
+                </div>
 
-      // Niños
-      const kRail = document.getElementById('kidsRail');
-      kRail.innerHTML = '';
-      catalog.filter(i => i.categoria === 'Niños').forEach(i => kRail.appendChild(crearCard(i)));
-    }
+                <p>La consulta digital está pendiente de conexión al padrón. Para solicitar tu carnet, <a href="#contacto" class="underline">contactá a la seccional</a>.</p>
+            </div>
+        </div>
+    </section>
 
-    // FILTRADO Y BÚSQUEDA
-    function filtrarCategoria(cat, btn) {
-      if (btn) {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.replace('bg-vatican-gold', 'bg-slate-800'));
-        btn.classList.replace('bg-slate-800', 'bg-vatican-gold');
-      }
+    <section id="cultura" class="container mx-auto px-4 py-12"><h3 class="text-2xl font-bold text-blue-900">Agenda Cultural</h3><div id="public-agenda" class="grid md:grid-cols-3 gap-4 mt-6"></div></section><section id="cursos" class="container mx-auto px-4 py-12"><h3 class="text-2xl font-bold text-blue-900">Cursos y Capacitaciones</h3><div id="public-cursos" class="grid md:grid-cols-3 gap-4 mt-6"></div></section><section id="beneficios" class="container mx-auto px-4 py-12"><h3 class="text-2xl font-bold text-blue-900">Beneficios para Afiliados</h3><div id="public-beneficios" class="grid md:grid-cols-3 gap-4 mt-6"></div></section>
+    <!-- ESTRUCTURA SINDICAL / AUTORIDADES (Estilo CGT Oficial) -->
+    <section id="autoridades" class="container mx-auto px-4 py-16">
+        <div class="text-center max-w-xl mx-auto mb-12">
+            <h3 class="text-3xl font-bold text-blue-900">Estructura Sindical</h3>
+            <p class="text-gray-600 mt-2">Conducción oficial aprobada y unificada de la Seccional Provincia de Santa Fe</p>
+        </div>
 
-      if (cat === 'todas') {
-        resetearVista();
-        return;
-      }
+        <div id="public-autoridades" class="grid md:grid-cols-3 gap-6"></div>
+    </section>
 
-      document.getElementById('mainContainer').classList.add('hidden');
-      const gridView = document.getElementById('gridViewSection');
-      const gridContainer = document.getElementById('gridContainer');
-      gridView.classList.remove('hidden');
+    <!-- FORMULARIO SEGURO DE DENUNCIAS LABORALES -->
+    <section id="denuncias" class="bg-blue-50 py-16 border-t-2 border-blue-200">
+        <div class="container mx-auto px-4 max-w-2xl">
+            <div class="text-center mb-8">
+                <i class="fas fa-shield-alt text-4xl text-blue-600 mb-2"></i>
+                <h3 class="text-2xl font-bold text-blue-900">Canal de Denuncias Laborales</h3>
+                <p class="text-sm text-blue-700 mt-1">Espacio de protección al trabajador. Reportá irregularidades en contrataciones, falta de pagos o incumplimiento de convenios de manera segura.</p>
+            </div>
 
-      document.getElementById('gridTitle').innerText = cat === 'favoritos' ? 'Mi Lista' : `Categoría: ${cat}`;
-      gridContainer.innerHTML = '';
+            <div class="bg-white p-8 rounded-2xl"><p>Para realizar una presentación laboral, utilizá el contacto oficial de la seccional. Este sitio no registra denuncias ni garantiza anonimato.</p><a href="#contacto" class="block mt-4 text-blue-900 font-bold">Ver canales de atención</a></div>
+        </div>
+    </section>
 
-      let lista = [];
-      if (cat === 'favoritos') {
-        lista = catalog.filter(v => favoritos.includes(v.id));
-      } else {
-        lista = catalog.filter(v => v.categoria.toLowerCase() === cat.toLowerCase());
-      }
+<section id="contacto" class="container mx-auto px-4 py-12"><h3 class="text-2xl font-bold text-blue-900">Contacto y Atención</h3><div id="contact-details" class="mt-4"></div></section>
+    <!-- FOOTER (Redes y Datos de Contacto) -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <p class="text-white font-bold text-lg">UADAV Santa Fe</p>
+                <p class="text-xs text-slate-500 mt-1">© 2026 Sindicato Unión Argentina de Artistas de Variedades.</p>
+                <p class="text-xs text-slate-500">Seccional Provincia de Santa Fe. Secretario General Javier Aguilar – Conducción.</p>
+            </div>
+            
+            <!-- Redes oficiales solicitadas -->
+            <div class="flex space-x-4">
+                <a href="https://instagram.com/uadavarg" target="_blank" class="w-10 h-10 bg-slate-800 hover:bg-slate-700 rounded-full flex items-center justify-center text-white text-lg transition shadow">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://x.com/uadavarg" target="_blank" class="w-10 h-10 bg-slate-800 hover:bg-slate-700 rounded-full flex items-center justify-center text-white text-lg transition shadow">
+                    <i class="fab fa-x-twitter"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
 
-      if (lista.length === 0) {
-        gridContainer.innerHTML = '<p class="text-slate-500 col-span-full py-12 text-center">No se encontraron contenidos.</p>';
-        return;
-      }
-
-      lista.forEach(item => {
-        gridContainer.appendChild(item.tipo === 'short' ? crearShortCard(item) : crearCard(item));
-      });
-    }
-
-    function buscarContenido() {
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      if (!q) { resetearVista(); return; }
-
-      document.getElementById('mainContainer').classList.add('hidden');
-      const gridView = document.getElementById('gridViewSection');
-      const gridContainer = document.getElementById('gridContainer');
-      gridView.classList.remove('hidden');
-
-      document.getElementById('gridTitle').innerText = `Resultados de búsqueda: "${q}"`;
-      gridContainer.innerHTML = '';
-
-      const filtrados = catalog.filter(v => v.titulo.toLowerCase().includes(q) || v.descripcion.toLowerCase().includes(q));
-      filtrados.forEach(item => {
-        gridContainer.appendChild(item.tipo === 'short' ? crearShortCard(item) : crearCard(item));
-      });
-    }
-
-    function resetearVista() {
-      document.getElementById('mainContainer').classList.remove('hidden');
-      document.getElementById('gridViewSection').classList.add('hidden');
-      document.getElementById('searchInput').value = '';
-    }
-
-    // REPRODUCTOR MODAL
-    function reproducirVideo(id, titulo, categoria, descripcion) {
-      currentVideoId = id;
-      document.getElementById('iframePlayer').src = construirEmbedUrl(id);
-      document.getElementById('modalTitulo').innerText = titulo;
-      document.getElementById('modalCategoria').innerText = categoria;
-      document.getElementById('modalDescripcion').innerText = descripcion;
-      actualizarBotonModalFav();
-      document.getElementById('videoModal').classList.remove('hidden');
-    }
-
-    function cerrarModal() {
-      document.getElementById('iframePlayer').src = '';
-      document.getElementById('videoModal').classList.add('hidden');
-    }
-
-    function cerrarModalBackdrop(e) {
-      if (e.target.id === 'videoModal') cerrarModal();
-    }
-
-    function toggleFavoritoCard(e, id) {
-      e.stopPropagation();
-      favoritos = favoritos.includes(id) ? favoritos.filter(i => i !== id) : [...favoritos, id];
-      localStorage.setItem('modo_peregrino_favs', JSON.stringify(favoritos));
-      cargarHome();
-    }
-
-    function toggleFavoritoModal() {
-      if (!currentVideoId) return;
-      favoritos = favoritos.includes(currentVideoId) ? favoritos.filter(i => i !== currentVideoId) : [...favoritos, currentVideoId];
-      localStorage.setItem('modo_peregrino_favs', JSON.stringify(favoritos));
-      actualizarBotonModalFav();
-      cargarHome();
-    }
-
-    function toggleFavoritoHero(id) {
-      favoritos = favoritos.includes(id) ? favoritos.filter(i => i !== id) : [...favoritos, id];
-      localStorage.setItem('modo_peregrino_favs', JSON.stringify(favoritos));
-      document.getElementById('btnHeroFav').innerHTML = favoritos.includes(id) ? '<i class="fa-solid fa-star text-vatican-gold"></i> En Mi Lista' : '<i class="fa-regular fa-star text-vatican-gold"></i> Guardar en Mi Lista';
-    }
-
-    function actualizarBotonModalFav() {
-      const btn = document.getElementById('btnModalFav');
-      btn.innerHTML = favoritos.includes(currentVideoId) ? '<i class="fa-solid fa-star text-vatican-gold"></i> En Mi Lista' : '<i class="fa-regular fa-star text-vatican-gold"></i> Mi Lista';
-    }
-
-    function abrirProbadorDirecto() {
-      reproducirVideo('5lfWxoaPGRg', 'Probador Universal de YouTube', 'Vatican Live', 'Pega cualquier enlace de YouTube o Short para comprobar su reproducción.');
-    }
-
-    function cargarLinkPersonalizado() {
-      const val = document.getElementById('customLinkInput').value;
-      const id = extraerYouTubeId(val);
-      if (id) {
-        reproducirVideo(id, 'Video Cargado Correctamente', 'Contenido Personalizado', `Reproduciendo ID: ${id}`);
-        document.getElementById('customLinkInput').value = '';
-      } else {
-        alert('Ingresa un enlace válido de YouTube o Short.');
-      }
-    }
-
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarModal(); });
-    window.onload = () => {
-      cargarHome();
-      cargarFeedVaticanoRSS(); // Ejecuta la actualización en vivo desde el Vaticano
-    };
-  </script>
-</body>
+<script src="assets/js/public.js" defer></script></body>
 </html>
